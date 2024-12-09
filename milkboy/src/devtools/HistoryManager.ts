@@ -3,11 +3,11 @@ type HistoryChangeCallback = () => void;
 
 // History 스택의 각 항목을 나타내는 인터페이스
 interface HistoryEntry {
-  pathname: string;    // 현재 경로
-  search: string;      // URL의 쿼리 파라미터
-  hash: string;        // URL의 해시
-  state: unknown;      // history.state에 저장된 상태
-  timestamp: number;   // 항목이 생성된 시간
+  pathname: string; // 현재 경로
+  search: string; // URL의 쿼리 파라미터
+  hash: string; // URL의 해시
+  state: unknown; // history.state에 저장된 상태
+  timestamp: number; // 항목이 생성된 시간
 }
 
 class HistoryManager {
@@ -99,7 +99,7 @@ class HistoryManager {
    * 모든 구독자에게 상태 변경을 알립니다.
    */
   private notifyListeners() {
-    this.listeners.forEach(listener => listener());
+    this.listeners.forEach((listener) => listener());
   }
 
   // 공개 메서드들

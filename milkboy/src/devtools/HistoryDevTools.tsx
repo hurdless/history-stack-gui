@@ -23,19 +23,19 @@ const HistoryDevTools: React.FC = () => {
 
   return (
     <div className="history-devtools">
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
         style={{
           position: 'fixed',
           bottom: '20px',
           right: '20px',
-          zIndex: 9999
+          zIndex: 9999,
         }}
       >
         History DevTools
       </button>
       {isOpen && (
-        <div 
+        <div
           style={{
             position: 'fixed',
             bottom: '80px',
@@ -45,23 +45,21 @@ const HistoryDevTools: React.FC = () => {
             backgroundColor: 'white',
             boxShadow: '0 0 10px rgba(0,0,0,0.1)',
             zIndex: 9999,
-            overflow: 'auto'
+            overflow: 'auto',
           }}
         >
           {historyStack.map((entry, index) => (
-            <div 
+            <div
               key={index}
               onClick={() => handleEntryClick(index)}
               style={{
                 padding: '8px',
                 cursor: 'pointer',
-                backgroundColor: index === currentIndex ? '#e6e6e6' : 'transparent'
+                backgroundColor: index === currentIndex ? '#e6e6e6' : 'transparent',
               }}
             >
               <div>{entry.pathname}</div>
-              <div style={{ fontSize: '12px', color: '#666' }}>
-                {new Date(entry.timestamp).toLocaleTimeString()}
-              </div>
+              <div style={{ fontSize: '12px', color: '#666' }}>{new Date(entry.timestamp).toLocaleTimeString()}</div>
             </div>
           ))}
         </div>
