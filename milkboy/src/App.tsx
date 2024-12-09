@@ -1,31 +1,17 @@
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
+import { useNavigate } from 'react-router-dom';
 import './App.css';
-import HistoryDevTools from './devtools/HistoryDevTools';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const navigate = useNavigate();
 
   return (
     <>
-      <HistoryDevTools />
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+      <button onClick={() => navigate('/test1')}>test1</button>
+      <button onClick={() => navigate('/test2')}>test2</button>
+      <button onClick={() => navigate('/test3')}>test3</button>
+      <button onClick={() => navigate('/test4')}>test4</button>
+      <button onClick={() => navigate(-1)}>뒤로가기</button>
+      <button onClick={() => navigate(1)}>앞으로가기</button>
     </>
   );
 }
