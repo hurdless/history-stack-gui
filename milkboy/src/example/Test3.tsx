@@ -11,6 +11,9 @@ const Test3 = () => {
         <button onClick={() => navigate('/test1')}>Test1</button>
         <button onClick={() => navigate('/test2')}>Test2</button>
         <button onClick={() => navigate('/test4')}>Test4</button>
+        <a href="/test1">A tag - Test1</a>
+        <a href="/test2">A tag - Test2</a>
+        <a href="/test4">A tag - Test4</a>
       </div>
       <button onClick={() => navigate(-1)}>뒤로가기</button>
       <button onClick={() => navigate(1)}>앞으로가기</button>

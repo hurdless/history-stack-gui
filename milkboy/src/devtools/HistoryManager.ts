@@ -55,6 +55,7 @@ class HistoryManager {
    */
   private setupListeners() {
     window.addEventListener('popstate', this.handlePopState);
+    window.addEventListener('click', this.handleAnchorClick);
   }
 
   /**
@@ -66,6 +67,55 @@ class HistoryManager {
     this.currentIndex = Math.max(0, this.currentIndex - 1);
     this.stack[this.currentIndex] = entry;
     this.notifyListeners();
+  };
+
+  /**
+   * 링크가 내부 링크인지 확인하는 헬퍼 함수
+   */
+  private isInternalLink(anchor: HTMLAnchorElement): boolean {
+    // 다운로드 속성이 있는 경우
+    if (anchor.hasAttribute('download')) return false;
+
+    // target이 _blank인 경우
+    if (anchor.target === '_blank') return false;
+
+    const href = anchor.getAttribute('href');
+    if (!href) return false;
+
+    // 특수 링크 체크
+    if (href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('sms:') || href.startsWith('#'))
+      return false;
+
+    try {
+      // 현재 도메인과 다른 외부 링크 체크
+      const url = new URL(href, window.location.origin);
+      if (url.origin !== window.location.origin) return false;
+
+      return true;
+    } catch {
+      // 상대 경로인 경우 내부 링크로 간주
+      return true;
+    }
+  }
+
+  /**
+   * a 태그 클릭 이벤트를 가로채서 처리하는 핸들러
+   */
+  private handleAnchorClick = (event: MouseEvent) => {
+    const anchor = (event.target as Element).closest('a');
+    if (!anchor || !(anchor instanceof HTMLAnchorElement)) return;
+
+    // 내부 링크가 아닌 경우 기본 동작 유지
+    if (!this.isInternalLink(anchor)) return;
+
+    // 메타키(cmd/ctrl)나 다른 수정자 키와 함께 클릭된 경우 기본 동작 유지
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+    const href = anchor.getAttribute('href');
+    if (!href) return;
+
+    event.preventDefault();
+    window.history.pushState(null, '', href);
   };
 
   /**
@@ -146,6 +196,7 @@ class HistoryManager {
    */
   cleanup() {
     window.removeEventListener('popstate', this.handlePopState);
+    window.removeEventListener('click', this.handleAnchorClick);
     // TODO: History API 원래대로 복구하는 로직 추가 필요
   }
 }
