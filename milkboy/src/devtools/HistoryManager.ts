@@ -131,7 +131,14 @@ class HistoryManager {
 
     event.preventDefault();
 
-    window.history.pushState(null, '', href);
+    // React Router의 state 형식과 동일한 객체 생성
+    const newState = {
+      usr: null,
+      key: Math.random().toString(36).substring(2, 10), // 랜덤한 key 생성
+      idx: this.currentIndex + 1,
+    };
+
+    window.history.pushState(newState, '', href);
   };
 
   /**
