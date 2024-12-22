@@ -64,8 +64,23 @@ class HistoryManager {
    */
   private handlePopState = (event: PopStateEvent) => {
     const entry = this.createHistoryEntry(event.state);
-    this.currentIndex = Math.max(0, this.currentIndex - 1);
-    this.stack[this.currentIndex] = entry;
+
+    console.log('event', event);
+    console.log('this.stack', this.stack);
+    console.log('entry', entry);
+    // 현재 URL과 일치하는 스택의 인덱스 찾기
+    const newIndex = this.stack.findIndex((item) => event.state.key === (item.state as { key: string }).key);
+
+    console.log('newIndex', newIndex);
+
+    if (newIndex !== -1) {
+      this.currentIndex = newIndex;
+    } else {
+      // 스택에 없는 새로운 위치인 경우
+      this.currentIndex++;
+      this.stack.splice(this.currentIndex, this.stack.length - this.currentIndex, entry);
+    }
+
     this.notifyListeners();
   };
 
@@ -115,6 +130,7 @@ class HistoryManager {
     if (!href) return;
 
     event.preventDefault();
+
     window.history.pushState(null, '', href);
   };
 
@@ -129,10 +145,13 @@ class HistoryManager {
     // pushState 오버라이드: 새로운 히스토리 항목 추가
     window.history.pushState = (state: unknown, title: string, url?: string | null) => {
       originalPushState(state, title, url);
+
       const entry = this.createHistoryEntry(state);
+
+      // 현재 인덱스 다음 위치에 새 항목 추가
       this.currentIndex++;
-      // 현재 인덱스 이후의 항목들을 제거하고 새 항목 추가
       this.stack.splice(this.currentIndex, this.stack.length - this.currentIndex, entry);
+
       this.notifyListeners();
     };
 
