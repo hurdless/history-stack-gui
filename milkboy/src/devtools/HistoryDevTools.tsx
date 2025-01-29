@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { historyManager } from './HistoryManager';
+import { Position } from '../types/common.type';
+import { calculatePanelPosition } from '../utils/caculatePosition';
+import { calculateButtonPosition } from '../utils/caculatePosition';
 
-const HistoryDevTools: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
+interface DevToolsProps {
+  initialIsOpen?: boolean;
+  panelPosition?: Position;
+  buttonPosition?: Position;
+}
+
+const HistoryDevTools: React.FC<DevToolsProps> = ({
+  initialIsOpen = false,
+  panelPosition = 'bottom-right',
+  buttonPosition = 'bottom-right',
+}) => {
+  const [isOpen, setIsOpen] = useState(initialIsOpen);
   const [historyStack, setHistoryStack] = useState(historyManager.getCurrentStack());
   const [currentIndex, setCurrentIndex] = useState(historyManager.getCurrentIndex());
 
@@ -27,9 +40,8 @@ const HistoryDevTools: React.FC = () => {
         onClick={() => setIsOpen(!isOpen)}
         style={{
           position: 'fixed',
-          bottom: '20px',
-          right: '20px',
           zIndex: 9999,
+          ...calculateButtonPosition(buttonPosition),
         }}
       >
         History DevTools
@@ -38,14 +50,13 @@ const HistoryDevTools: React.FC = () => {
         <div
           style={{
             position: 'fixed',
-            bottom: '80px',
-            right: '20px',
             width: '300px',
             maxHeight: '500px',
             backgroundColor: 'white',
             boxShadow: '0 0 10px rgba(0,0,0,0.1)',
             zIndex: 9999,
             overflow: 'auto',
+            ...calculatePanelPosition(panelPosition),
           }}
         >
           {historyStack.map((entry, index) => (

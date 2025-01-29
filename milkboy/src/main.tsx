@@ -7,7 +7,7 @@ import { router } from './router.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <HistoryDevTools />
+    <HistoryDevTools initialIsOpen={true} panelPosition="bottom-right" buttonPosition="bottom-right" />
     <RouterProvider router={router} />
   </StrictMode>,
 );
