@@ -65,13 +65,8 @@ class HistoryManager {
   private handlePopState = (event: PopStateEvent) => {
     const entry = this.createHistoryEntry(event.state);
 
-    console.log('event', event);
-    console.log('this.stack', this.stack);
-    console.log('entry', entry);
     // 현재 URL과 일치하는 스택의 인덱스 찾기
     const newIndex = this.stack.findIndex((item) => event.state.key === (item.state as { key: string }).key);
-
-    console.log('newIndex', newIndex);
 
     if (newIndex !== -1) {
       this.currentIndex = newIndex;
@@ -95,22 +90,19 @@ class HistoryManager {
     if (anchor.target === '_blank') return false;
 
     const href = anchor.getAttribute('href');
+
     if (!href) return false;
 
     // 특수 링크 체크
     if (href.startsWith('mailto:') || href.startsWith('tel:') || href.startsWith('sms:') || href.startsWith('#'))
       return false;
 
-    try {
-      // 현재 도메인과 다른 외부 링크 체크
-      const url = new URL(href, window.location.origin);
-      if (url.origin !== window.location.origin) return false;
+    // 현재 도메인과 다른 외부 링크 체크
+    const url = new URL(href, window.location.origin);
 
-      return true;
-    } catch {
-      // 상대 경로인 경우 내부 링크로 간주
-      return true;
-    }
+    if (url.origin !== window.location.origin) return false;
+
+    return true;
   }
 
   /**
@@ -139,6 +131,10 @@ class HistoryManager {
     };
 
     window.history.pushState(newState, '', href);
+
+    // history.pushState는 react router가 라우트 변경을 감지하지 않기 때문에 이벤트를 임의로 발생시키는 것이 필요
+    const popStateEvent = new PopStateEvent('popstate', { state: newState });
+    window.dispatchEvent(popStateEvent);
   };
 
   /**
