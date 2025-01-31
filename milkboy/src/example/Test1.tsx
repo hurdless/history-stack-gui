@@ -11,6 +11,9 @@ const Test1 = () => {
         <button onClick={() => navigate('/test2')}>Test2</button>
         <button onClick={() => navigate('/test3')}>Test3</button>
         <button onClick={() => navigate('/test4')}>Test4</button>
+        <button onClick={() => navigate('/test2', { replace: true })}>Test2 replace</button>
+        <button onClick={() => navigate('/test3', { replace: true })}>Test3 replace</button>
+        <button onClick={() => navigate('/test4', { replace: true })}>Test4 replace</button>
         <a href="/test2">A tag - Test5</a>
         <a href="/test3">A tag - Test3</a>
         <a href="/test4">A tag - Test4</a>
